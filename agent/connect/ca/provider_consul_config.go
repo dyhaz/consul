@@ -37,6 +37,8 @@ func ParseConsulCAConfig(raw map[string]interface{}) (*structs.ConsulCAProviderC
 		return nil, err
 	}
 
+	config.IntermediateCertTTL = 356 * 24 * time.Hour
+
 	return &config, nil
 }
 
