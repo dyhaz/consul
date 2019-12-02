@@ -10,16 +10,13 @@ import (
 	"os"
 	"runtime"
 	"sync"
+	"syscall"
 	"time"
 
 	"github.com/mitchellh/go-testing-interface"
 )
 
 const (
-	// blockSize is the size of the allocated port block. ports are given out
-	// consecutively from that block and after that point in a LRU fashion.
-	blockSize = 1500
-
 	// maxBlocks is the number of available port blocks before exclusions.
 	maxBlocks = 30
 
@@ -32,6 +29,10 @@ const (
 )
 
 var (
+	// blockSize is the size of the allocated port block. ports are given out
+	// consecutively from that block and after that point in a LRU fashion.
+	blockSize int
+
 	// effectiveMaxBlocks is the number of available port blocks.
 	// lowPort + effectiveMaxBlocks * blockSize must be less than 65535.
 	effectiveMaxBlocks int
@@ -71,6 +72,18 @@ var (
 // initialize is used to initialize freeport.
 func initialize() {
 	var err error
+
+	blockSize = 1500
+	var rLimit syscall.Rlimit
+	err = syscall.Getrlimit(syscall.RLIMIT_NOFILE, &rLimit)
+	if err != nil {
+		panic("freeport: error getting rlimit: " + err.Error())
+	}
+	if int(rLimit.Cur) < blockSize {
+		logf("INFO", "blockSize %d too big for system limit %d. Adjusting...", blockSize, rLimit.Cur)
+		blockSize = int(rLimit.Cur) - 3
+	}
+
 	effectiveMaxBlocks, err = adjustMaxBlocks()
 	if err != nil {
 		panic("freeport: ephemeral port range detection failed: " + err.Error())
