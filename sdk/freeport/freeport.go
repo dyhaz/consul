@@ -10,7 +10,6 @@ import (
 	"os"
 	"runtime"
 	"sync"
-	"syscall"
 	"time"
 
 	"github.com/mitchellh/go-testing-interface"
@@ -74,14 +73,13 @@ func initialize() {
 	var err error
 
 	blockSize = 1500
-	var rLimit syscall.Rlimit
-	err = syscall.Getrlimit(syscall.RLIMIT_NOFILE, &rLimit)
+	limit, err := systemLimit()
 	if err != nil {
-		panic("freeport: error getting rlimit: " + err.Error())
+		panic("freeport: error getting system limit: " + err.Error())
 	}
-	if int(rLimit.Cur) < blockSize {
-		logf("INFO", "blockSize %d too big for system limit %d. Adjusting...", blockSize, rLimit.Cur)
-		blockSize = int(rLimit.Cur) - 3
+	if limit > 0 && int(limit) < blockSize {
+		logf("INFO", "blockSize %d too big for system limit %d. Adjusting...", blockSize, limit)
+		blockSize = int(limit) - 3
 	}
 
 	effectiveMaxBlocks, err = adjustMaxBlocks()
