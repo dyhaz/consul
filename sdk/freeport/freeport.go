@@ -77,9 +77,9 @@ func initialize() {
 	if err != nil {
 		panic("freeport: error getting system limit: " + err.Error())
 	}
-	if limit > 0 && int(limit) < blockSize {
+	if limit > 0 && limit < blockSize {
 		logf("INFO", "blockSize %d too big for system limit %d. Adjusting...", blockSize, limit)
-		blockSize = int(limit) - 3
+		blockSize = limit - 3
 	}
 
 	effectiveMaxBlocks, err = adjustMaxBlocks()

@@ -4,8 +4,8 @@ package freeport
 
 import "golang.org/x/sys/unix"
 
-func systemLimit() (uint64, error) {
+func systemLimit() (int, error) {
 	var limit unix.Rlimit
 	err := unix.Getrlimit(unix.RLIMIT_NOFILE, &limit)
-	return limit.Cur, err
+	return int(limit.Cur), err
 }

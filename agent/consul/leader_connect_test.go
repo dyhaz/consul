@@ -162,6 +162,18 @@ func TestLeader_SecondaryCA_Initialize(t *testing.T) {
 	}
 }
 
+func waitForActiveCARoot(t *testing.T, srv *Server, expect *structs.CARoot) {
+	retry.Run(t, func(r *retry.R) {
+		_, root := srv.getCAProvider()
+		if root == nil {
+			r.Fatal("no root")
+		}
+		if root.ID != expect.ID {
+			r.Fatalf("current active root is %s; waiting for %s", root.ID, expect.ID)
+		}
+	})
+}
+
 func TestLeader_SecondaryCA_IntermediateRenew(t *testing.T) {
 	t.Parallel()
 
@@ -219,9 +231,8 @@ func TestLeader_SecondaryCA_IntermediateRenew(t *testing.T) {
 		originalRoot = activeRoot
 	}
 
-	// Wait for current state to be reflected in both datacenters.
-	waitForActiveCARoot(t, s1, "dc1", originalRoot)
-	waitForActiveCARoot(t, s2, "dc2", originalRoot)
+	waitForActiveCARoot(t, s1, originalRoot)
+	waitForActiveCARoot(t, s2, originalRoot)
 
 	// Wait for dc2's intermediate to be refreshed.
 	retry.Run(t, func(r *retry.R) {
