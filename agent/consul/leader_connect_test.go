@@ -235,6 +235,10 @@ func TestLeader_SecondaryCA_IntermediateRenew(t *testing.T) {
 	waitForActiveCARoot(t, s2, originalRoot)
 
 	// Wait for dc2's intermediate to be refreshed.
+	// It is possible that test fails when the blocking query doesn't return.
+	// When https://github.com/hashicorp/consul/pull/3777 is merged
+	// however, defaultQueryTime will be configurable and we con lower it
+	// so that it returns for sure.
 	retry.Run(t, func(r *retry.R) {
 		secondaryProvider, _ := s2.getCAProvider()
 		intermediatePEM, err = secondaryProvider.ActiveIntermediate()
