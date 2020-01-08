@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ## 1.7.0-beta2 (December 20, 2019)
 
 FEATURES:
@@ -323,6 +324,8 @@ BUG FIXES:
 * catalog: fix an issue where renaming nodes could cause registration instability [[GH-5518](https://github.com/hashicorp/consul/issues/5518)]
 * network areas (Consul Enterprise): Fixed an issue that could cause a lock to be held unnecessarily causing other operations to hang.
 
+=======
+>>>>>>> v1.4.5
 ## 1.4.5 (May 22, 2019)
 
 SECURITY:

@@ -1881,6 +1881,7 @@ func TestACL(t *testing.T) {
 			defaultPolicy: DenyAll(),
 			policyStack: []*Policy{
 				&Policy{
+<<<<<<< HEAD
 					PolicyRules: PolicyRules{
 						KeyPrefixes: []*KeyRule{
 							&KeyRule{
@@ -1913,6 +1914,38 @@ func TestACL(t *testing.T) {
 								Prefix: "bar/baz",
 								Policy: PolicyRead,
 							},
+=======
+					KeyPrefixes: []*KeyPolicy{
+						&KeyPolicy{
+							Prefix: "fo",
+							Policy: PolicyRead,
+						},
+						&KeyPolicy{
+							Prefix: "foo/",
+							Policy: PolicyWrite,
+						},
+						&KeyPolicy{
+							Prefix: "bar/",
+							Policy: PolicyWrite,
+						},
+						&KeyPolicy{
+							Prefix: "baz/",
+							Policy: PolicyWrite,
+						},
+						&KeyPolicy{
+							Prefix: "test/",
+							Policy: PolicyWrite,
+						},
+					},
+					Keys: []*KeyPolicy{
+						&KeyPolicy{
+							Prefix: "foo/bar",
+							Policy: PolicyWrite,
+						},
+						&KeyPolicy{
+							Prefix: "bar/baz",
+							Policy: PolicyRead,
+>>>>>>> v1.4.5
 						},
 					},
 				},
@@ -1944,12 +1977,19 @@ func TestACL(t *testing.T) {
 			defaultPolicy: AllowAll(),
 			policyStack: []*Policy{
 				&Policy{
+<<<<<<< HEAD
 					PolicyRules: PolicyRules{
 						Keys: []*KeyRule{
 							&KeyRule{
 								Prefix: "foo/bar",
 								Policy: PolicyRead,
 							},
+=======
+					Keys: []*KeyPolicy{
+						&KeyPolicy{
+							Prefix: "foo/bar",
+							Policy: PolicyRead,
+>>>>>>> v1.4.5
 						},
 					},
 				},

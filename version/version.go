@@ -15,7 +15,11 @@ var (
 	//
 	// Version must conform to the format expected by github.com/hashicorp/go-version
 	// for tests to work.
+<<<<<<< HEAD
 	Version = "1.7.0"
+=======
+	Version = "1.4.5"
+>>>>>>> v1.4.5
 
 	// A pre-release marker for the version. If this is "" (empty string)
 	// then it means that it is a final release. Otherwise, this is a pre-release
